@@ -1,0 +1,193 @@
+footer {
+    background-color: #2B3A42;
+    /* position: relative; */
+    min-height: 315px;
+    color: white;
+    direction: rtl;
+    /* padding-top: 130px; */
+}
+
+footer p a {
+    color: white;
+}
+
+.footer hr:last-of-type {
+    width: 85%;
+    height: 1px;
+    margin: 10px auto;
+    background-color: #414141;
+    color: #414141;
+    border: 0 none;
+}
+
+footer .flex-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 8px;
+}
+
+.s-b {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+
+.footer .footer--content-us {
+    width: 32%;
+}
+
+.footer ul {
+    list-style-type: none;
+    width: 100%;
+    float: left;
+}
+
+.footer div ul:first-of-type {
+    float: right;
+}
+
+.footer li>a {
+    position: relative;
+    text-align: right;
+    line-height: 35px;
+    color: #ccc;
+    padding-right: 15px;
+}
+
+.footer .footer--contact-us ul {
+    width: 100%;
+}
+
+.footer .footer--contact-us li {
+    position: relative;
+    text-align: right;
+    line-height: 25px;
+    color: #ccc;
+    padding-right: 5px;
+}
+
+.footer .footer--contact-us ul h4 {
+    text-align: right;
+    line-height: 35px;
+    color: #ccc;
+}
+
+.follow-us ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.follow-us ul li {
+    display: inline-block;
+}
+
+.footer li {
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    transition: all .15s linear;
+    -webkit-transition: all .15s linear;
+    -moz-transition: all .15s linear;
+    -ms-transition: all .15s linear;
+    -o-transition: all .15s linear;
+}
+
+.footer .footer--quick-accses li:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-right: 10px;
+}
+
+.footer .flex-row hr {
+    margin: 4px 0px 4px 0px;
+    width: 100%;
+}
+
+.footer .footer--quick-accses li>a:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: rgb(0, 255, 179);
+    right: 2px;
+    top: 23px;
+    top: .7rem;
+    transition: all .2s .07s;
+    -webkit-transition: all .2s .07s;
+    -moz-transition: all .2s .07s;
+    -ms-transition: all .2s .07s;
+    -o-transition: all .2s .07s;
+}
+
+.footer button {
+    display: inline-block;
+    color: white;
+    border: 1px solid white;
+    border-left: none;
+    border-radius: 0px 2px 2px 0px;
+    background-color: #56c45f;
+    -webkit-border-radius: 0px 2px 2px 0px;
+    -moz-border-radius: 0px 2px 2px 0px;
+    -ms-border-radius: 0px 2px 2px 0px;
+    -o-border-radius: 0px 2px 2px 0px;
+    padding: 2px 9px;
+    height: 36px;
+}
+
+.footer button:hover {
+    background-color: #2e8535;
+}
+
+.footer input {
+    display: inline-block;
+    background: none;
+    border: 1px solid white;
+    border-right: none;
+    color: white;
+    border-radius: 2px 0px 0px 2px;
+    -webkit-border-radius: 2px 0px 0px 2px;
+    -moz-border-radius: 2px 0px 0px 2px;
+    -ms-border-radius: 2px 0px 0px 2px;
+    -o-border-radius: 2px 0px 0px 2px;
+    padding: 2px 5px 2px 1px;
+    height: 36px;
+}
+
+@media only screen and (max-width: 720px) {
+    footer .m-flex-col {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+    footer ul li {
+        padding-left: 4px;
+    }
+    footer .footer--social-accses {
+        -webkit-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+        order: 1;
+    }
+    footer .footer--about-us {
+        -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+        order: 3;
+    }
+    footer .footer--quick-accses {
+        -webkit-box-ordinal-group: 3;
+        -ms-flex-order: 2;
+        order: 2;
+    }
+}
