@@ -34,7 +34,6 @@ $(document).ready(() => {
         let navItemPlacement = () => {
                 let topOfActive = $('li.active').position().top;
                 let margin = 2 - topOfActive;
-                console.log('margin', margin);
                 $('.navbar-menu').css("top", margin + 'px');
             }
             //========== event listeners ==========
@@ -79,7 +78,7 @@ $(document).ready(() => {
             nav_active(curScrollPos);
             btnScrollUpFade(curScrollPos);
             nav_collapse(curScrollPos);
-            parallax(curScrollPos);
+
         });
 
         // ===== click =====
@@ -144,29 +143,15 @@ $(document).ready(() => {
                 socialSlideUp();
             }, 300)
         });
+        let dropInfoScroll;
         $('ul.drop-down-ul li').on('mouseenter', function() {
             let itemIndex;
+            dropInfoScroll = $('.drop-down-info-container>div').height();
             itemIndex = $('ul.drop-down-ul li').index(this);
-            switch (itemIndex) {
-                case 0:
-                    $('.drop-down-info-container>div').css({ top: 0 });
-                    break;
-                case 1:
-                    $('.drop-down-info-container>div').css({ top: -400 });
-                    break;
-                case 2:
-                    $('.drop-down-info-container>div').css({ top: -800 });
-                    break;
-                case 3:
-                    $('.drop-down-info-container>div').css({ top: -1200 });
-                    break;
-                case 4:
-                    $('.drop-down-info-container>div').css({ top: -1600 });
-                    break;
-                case 5:
-                    $('.drop-down-info-container>div').css({ top: -2000 });
-                    break;
-            }
+            $('.drop-down-info-container').css({
+
+                'transform': 'translateY(' + -1 * (itemIndex * dropInfoScroll) + 'px)'
+            });
         });
 
 
@@ -183,33 +168,27 @@ $(document).ready(() => {
 
 
 
-
-
-
-
         //============= functions ==============
         let nav_collapse = (curScrollPos) => {
             if (curScrollPos > scrollPos) {
-                $('.navbar-container').scrollTop(0);
-                $('.navbar-container').removeClass('active');
-                $('.navbar-container').css('min-height', '55px');
-                if ($('.navbar-menu').css('marginTop').replace(/[^-\d\.]/g, '') < 0) {
-                    $('.navbar-menu').css("margin-top", '0px');
-                } else {
-                    navItemPlacement();
-                }
                 if (curScrollPos >= 180) {
                     nav.addClass('hidden');
-                    $('.navbar-collapse-btn').stop().fadeOut(8);
-                    if ($('.navbar-menu').css('marginTop').replace(/[^-\d\.]/g, '') < 0) {
-                        $('.navbar-menu').css("margin-top", '0px');
-                    } else {
-                        navItemPlacement();
+                    if (window.innerWidth < 1060) {
+                        $('.navbar-collapse-btn').fadeOut(8);
+                        if ($('.navbar-menu').css('marginTop').replace(/[^-\d\.]/g, '') < 0) {
+                            $('.navbar-menu').css("margin-top", '0px');
+                        } else {
+                            navItemPlacement();
+                        }
                     }
                 }
-            } else if (curScrollPos < scrollPos && !menuActive) {
-                $('.navbar-collapse-btn').stop().fadeIn(5);
+                $('.navbar-container').scrollTop(0);
+                $('.navbar-container').removeClass('active');
+            } else if (curScrollPos < scrollPos) {
                 nav.removeClass('hidden');
+                if (window.innerWidth < 1060) {
+                    $('.navbar-collapse-btn').stop().fadeIn(5);
+                }
             }
             scrollPos = curScrollPos;
         }
@@ -288,13 +267,7 @@ $(document).ready(() => {
                 }
             }
         }
-        $.fn.isInViewport = function() {
-            var elementTop = $(this).offset().top;
-            var elementBottom = elementTop + $(this).outerHeight();
-            var viewportTop = $(window).scrollTop();
-            var viewportBottom = viewportTop + $(window).height();
-            return elementBottom > viewportTop && elementTop < viewportBottom;
-        };
+
 
 
 
@@ -537,3 +510,12 @@ $(document).ready(() => {
 
 
 });
+
+
+$.fn.isInViewport = function() {
+    var elementTop = $(this).offset().top;
+    var elementBottom = elementTop + $(this).outerHeight();
+    var viewportTop = $(window).scrollTop();
+    var viewportBottom = viewportTop + $(window).height();
+    return elementBottom > viewportTop && elementTop < viewportBottom;
+};

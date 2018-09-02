@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#28aff8">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.svg">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/css.css">
+    <link rel="stylesheet" href="css/news_d_page.css">
+    <title></title>
+    <style>
+        section.gl {
+            padding: .5vw;
+            font-size: 0;
+            width: 85%;
+            margin: 20px auto;
+            display: -ms-flexbox;
+            -ms-flex-wrap: wrap;
+            -ms-flex-direction: column;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+            display: -webkit-box;
+            display: flex;
+        }
+        
+        section.gl div {
+            -webkit-box-flex: auto;
+            -ms-flex: auto;
+            flex: auto;
+            width: 200px;
+            margin: .5vw;
+        }
+        
+        section.gl div img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .modal-disp-none {
+            display: none;
+            -webkit-transition: all .8s ease-in-out;
+            -o-transition: all .8s ease-in-out;
+            transition: all .8s ease-in-out;
+            opacity: 0;
+        }
+        
+        .gallery-modal {
+            -webkit-transition: all .8s ease-in-out;
+            -o-transition: all .8s ease-in-out;
+            transition: all .8s ease-in-out;
+            opacity: 0;
+        }
+        
+        .modal-container {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            left: 0px;
+            top: 0px;
+            z-index: 2000;
+            -webkit-transition: all .8s ease-in-out;
+            -o-transition: all .8s ease-in-out;
+            transition: all .8s ease-in-out;
+            opacity: 1;
+        }
+        
+        .modal-container div {
+            z-index: 2001;
+            max-width: 90%;
+            max-height: 95%;
+            overflow: hidden;
+        }
+        
+        .modal-container div img {
+            width: 100%;
+            -o-object-fit: cover;
+            object-fit: cover;
+            -webkit-box-shadow: 0px 1px 100px black;
+            box-shadow: 0px 1px 100px black;
+        }
+        
+        .dark-overlay {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 1999;
+            display: none;
+        }
+        
+        .btn-modal-next {
+            right: 15px;
+            top: 50%;
+            width: -webkit-fit-content;
+            width: -moz-fit-content;
+            width: fit-content;
+            z-index: 2001;
+            position: fixed;
+        }
+        
+        .btn-modal-pre {
+            left: 15px;
+            top: 50%;
+            width: -webkit-fit-content;
+            width: -moz-fit-content;
+            width: fit-content;
+            position: fixed;
+            z-index: 2001;
+        }
+        
+        @media screen and (max-width: 400px) {
+            section.gl div {
+                margin: 0px;
+            }
+            section.gl {
+                padding: 0;
+            }
+        }
+        
+        .modal-img {
+            opacity: 0;
+            transform-origin: center;
+            transition: all 2s ease;
+        }
+        
+        .prev {
+            transform: translateX(-65%) rotateY(-50deg);
+        }
+        
+        .next {
+            transform: translateX(45%) rotateY(50deg);
+        }
+        
+        .img-modal {
+            transform-style: preserve-3d;
+            perspective: 1800px;
+            perspective-origin: center;
+        }
+        
+        .modal-img.active {
+            opacity: 1;
+            transform: translateX(0%) rotateY(0deg);
+        }
+        
+        .modal-img.deactive-next {
+            opacity: .3;
+            transform: translateX(80%) translateZ(-700px) rotateY(70deg);
+        }
+        
+        .modal-img.deactive-prev {
+            opacity: .3;
+            transform: translateX(-80%) translateZ(-700px) rotateY(290deg);
+        }
+        
+        .gl div {
+            height: fit-content;
+            z-index: 1;
+            transition: all .9s ease-in-out;
+            cursor: zoom-in;
+        }
+        
+        .gl div:hover {
+            transform: scale(1.35);
+            z-index: 100;
+            box-shadow: 0px 12px 18px black;
+        }
+        
+        .gl div.blur {
+            filter: blur(2px);
+        }
+        
+        @media only screen and (max-width: 480px) {
+            .gl div:hover {
+                transform: none;
+                z-index: 1;
+                box-shadow: none;
+            }
+            .gl div img {
+                margin: 2px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!--navbar-->
+    <header class="col-xl-2">
+        <div class="header-social-container flex-row flex-self-c xs-pad">
+            <a href="#" class="sm-pad"><i class="fa fa-2x fa-instagram"></i></a>
+            <a href="#" class="sm-pad"><i class="fa fa-2x fa-whatsapp"></i></a>
+            <a href="#" class="sm-pad"><i class="fa fa-2x fa-telegram"></i></a>
+        </div>
+        <div class="header-logo-container">
+            <img src="content/logo/logo.png">
+        </div>
+    </header>
+    <div class="navbar-collapse-btn">
+        <i class="fa fa-reorder"></i>
+    </div>
+    <nav class="navbar-container col-xl-2 overlay-on flex-row">
+        <ul class="navbar-menu fit-content">
+            <li class="wave">
+                <a href="index.html">خانه</a>
+            </li>
+            <li class="wave  ">
+                <a href="news_d_page.html">چرا ترکیه</a>
+            </li>
+            <li class="drop-down active">
+                <a>فعالیت های ماه</a>
+                <div class="drop-down-container pos-rel of-h drop-down-container-active">
+                    <ul class="drop-down-ul">
+                        <li class="wave  active">
+                            <i class="fa fa-plane"></i>
+                            <a class="" href="">اقامت و مهاجرت</a>
+                        </li>
+                        <li class="wave">
+                            <i class="fa fa-briefcase"></i>
+                            <a class="" href="">فرصت های شغلی</a>
+                        </li>
+                        <li class="wave">
+                            <i class="fa fa-home"></i>
+                            <a class="" href="">خرید خانه</a>
+                        </li>
+                        <li class="wave">
+                            <i class="fa fa-graduation-cap"></i>
+                            <a class="" href="">تحصیل در ترکیه</a>
+                        </li>
+                        <li class="wave">
+                            <i class="fa fa-car"></i>
+                            <a class="" href="">اجاره خودرو</a>
+                        </li>
+                        <li class="wave">
+                            <i class="fa fa-hotel"></i>
+                            <a class="" href="">رزرو بلیط و هتل</a>
+                        </li>
+                    </ul>
+                    <div class="drop-down-info-container flex-col">
+                        <div class="flex-row flex-c ">
+                            <div class="drop-down-info">
+                                <p style="color:black">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف
+                                    بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده ایجاد کرد. حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
+                            </div>
+                            <div class="drop-down-img">
+                                <img src="content/images/travel.png">
+                            </div>
+                        </div>
+                        <div class="flex-row flex-c ">
+                            <div class="drop-down-info">
+                                <p style="color:black">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف
+                                    بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده ایجاد کرد. حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
+                            </div>
+                            <div class="drop-down-img">
+                                <img src="content/images/bussines.png">
+                            </div>
+                        </div>
+                        <div class="flex-row flex-c ">
+                            <div class="drop-down-info">
+                                <p style="color:black">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف
+                                    بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده ایجاد کرد. حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
+                            </div>
+                            <div class="drop-down-img">
+                                <img src="content/images/house.png">
+                            </div>
+                        </div>
+                        <div class="flex-row flex-c">
+                            <div class="drop-down-info">
+                                <p style="color:black">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف
+                                    بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده ایجاد کرد. حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
+                            </div>
+                            <div class="drop-down-img">
+                                <img src="content/images/Student.png">
+                            </div>
+                        </div>
+                        <div class="flex-row flex-c ">
+                            <div class="drop-down-info">
+                                <p style="color:black">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف
+                                    بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده ایجاد کرد. حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
+                            </div>
+                            <div class="drop-down-img">
+                                <img src="content/images/rentcar.png">
+                            </div>
+                        </div>
+                        <div class="flex-row flex-c">
+                            <div class="drop-down-info">
+                                <p style="color:black">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف
+                                    بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده ایجاد کرد. حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
+                            </div>
+                            <div class="drop-down-img">
+                                <img src="content/images/hotel.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class=" wave">
+                <a href="gallery.html">گالری</a>
+            </li>
+            <li class="wave">
+                <a href="contact_us.html">ارتباط با ما</a>
+            </li>
+        </ul>
+
+    </nav>
+    <div class="progress-container">
+        <div class="progress-bar" id="myBar"></div>
+    </div>
+    <div class="overlay"> </div>
+
+    <!--navbar end-->
+
+
+
+    <!--main content-->
+    <div class="col-xl-2 auto-height flex-col flex-c site">
+        <div class="col-xl-2 auto-height flex-row flex-c">
+            <section class="flex-row col-xl-2 flex-wrap auto-height flex-s-a">
+                <section class="col-lg-1-2 m-col-xl-2 t-col-lg-1 flex-row flex-wrap auto-height">
+                    <!--tags-->
+                    <div class="comp-card col-xl-2 m-col-xl-2">
+                        <div class="flex-row flex-wrap">
+                            <span><a href="index.html" class="c-black sm-pad">خانه</a></span>
+                            <span><i class="fa fa-angle-left"></i></span>
+                            <span><a href="news_d_page.html" class="c-black sm-pad">اخبار</a></span>
+                            <span><i class="fa fa-angle-left"></i></span>
+                            <span><a href="single_news.html" class="c-black sm-pad">تیتر این خبر</a></span>
+                        </div>
+                    </div>
+                    <!--tags end-->
+
+                    <!--article-->
+                    <article class="comp-card col-xl-2 auto-height element" style="padding:0">
+
+                        <div class="col-xl-2 auto-height ">
+                            <div class="col-xl-2 pos-rel">
+                                <img src="content/images/06.png">
+                                <!--article header-->
+                                <div class="flex-col flex-wrap h-flex-start pos-abs article-h sm-pad">
+                                    <h1 class="md-pad caption-border-r c-white">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از طراحان گرافیک است.</h1>
+                                </div>
+                                <!--article header end-->
+                            </div>
+                        </div>
+
+                        <!--article content-->
+                        <div class="flex-col flex-c flex-wrap xs-pad auto-height">
+
+
+
+                            <!--main text-->
+                            <div class="flex-col flex-c col-lg-2 m-col-xl-2 xs-pad">
+                                <p class="txt-justify">
+                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.
+                                    کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این
+                                    صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.لورم
+                                    ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه
+                                    و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط
+                                    سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از
+                                    طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد
+                                    نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص
+                                    طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات
+                                    پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است
+                                    و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری
+                                    را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی
+                                    دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                                </p>
+                                <div class="col-xl-1 t-col-xl-2 m-col-xl-2">
+                                    <figure class="txt-center">
+                                        <img src="content/images/08.jpg">
+                                        <figcaption style="margin-top: 3px;">این عکس مربوط به مکانی در تزکیست</figcaption>
+                                    </figure>
+                                </div>
+                                <p class="txt-justify">
+                                    با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص
+                                    طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان
+                                    جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها
+                                    و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده
+                                    از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته،
+                                    حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری
+                                    موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.و متون بلکه روزنامه و مجله در ستون و سطرآنچنان
+                                    که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت
+                                    بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل
+                                    حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه
+                                    و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را
+                                    می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ
+                                    به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی
+                                    مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی
+                                    الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی
+                                    سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که
+                                    لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت
+                                    بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل
+                                    حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با
+                                    هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو
+                                    در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی
+                                    اساسا مورد استفاده قرار گیرد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی
+                                    مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی
+                                    الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی
+                                    سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                                </p>
+                            </div>
+                            <!--main text end-->
+                            <h2>تصاویر</h2>
+                            <!--article content end-->
+                            <section class="site flex-row flex-wrap gallery gl">
+                                <div data-index=1><img src="content/images/turkey1.jpg" alt="turkey"></div>
+                                <div data-index=2><img src="content/images/turkey2.jpg" alt="turkey"></div>
+                                <div data-index=3><img src="content/images/turkey3.jpg" alt="turkey"></div>
+                                <div data-index=4><img src="content/images/turkey4.jpg" alt="turkey"></div>
+                                <div data-index=4><img src="content/images/turkey5.jpg" alt="turkey"></div>
+                                <div data-index=4><img src="content/images/turkey6.jpg" alt="turkey"></div>
+                                <div data-index=4><img src="content/images/turkey7.jpg" alt="turkey"></div>
+                                <div data-index=4><img src="content/images/turkey8.jpg" alt="turkey"></div>
+                                <div data-index=4><img src="content/images/turkey9.jpg" alt="turkey"></div>
+                                <div data-index=4><img src="content/images/turkey10.jpg" alt="turkey"></div>
+                            </section>
+
+                            <div class="modal-disp-none fit-content gallery-modal">
+                                <div data-disposable="false" class="btn-modal-pre" style="z-index: 10000;"><i class="fa fa-chevron-left fa-2x c-white"></i></div>
+                                <div data-disposable="false" class="btn-modal-next" style="z-index: 10000;"><i class="fa fa-chevron-right fa-2x c-white"></i></div>
+                                <div class="pos-abs right-top lg-pad xs-marg btn-close" style="z-index: 10000;"><i class="fa fa-close fa-2x c-white"></i></div>
+                                <div class="img-modal" data-disposable="false" style="overflow: visible;"></div>
+                            </div>
+                            <div class="dark-overlay"></div>
+
+                            <!--article footer-->
+                            <div class="flex-col col-lg-2 m-col-xl-2 xs-pad border-top of-h">
+                                <span class="col-xl-2 of-h">منبع : <a href="https://ipekyar.com/news_d_page.html/single_news.html" class="c-black">www.ipekyar.com</a></span>
+                            </div>
+                            <!--article footer end-->
+                        </div>
+                    </article>
+
+                    <!--article end-->
+                </section>
+            </section>
+
+
+
+        </div>
+        <div class="flex-col flex-wrap flex-j-b auto-height col-xl-2" style="margin-top:20px;">
+            <div class="pos-rel col-xl-1 txt-center h-center">
+                <h2 class="i-caption"><b>دیگر مقالات</b></h2>
+            </div>
+            <div class="flex-row flex-j-b flex-wrap col-xl-2 xl-pad">
+                <div class="i-card rounded-b bg-white col-xs-2-1 t-col-md-1 m-col-xl-2 auto-height sm-pad">
+                    <div class="col-xl-2 auto-height pos-rel">
+                        <img src="content/images/l1.jpg">
+                        <div class="col-xl-2 pos-abs i-card-info">
+                        </div>
+                    </div>
+                    <div class="sm-pad i-border">
+                        <h3><a href="single_news.html">تیتر خبر اینجا قرار میگیرد</a></h3>
+                        <p class="txt-justify">استفاده از طراحان گرافیک است. چاپگره و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. </p>
+                    </div>
+                    <div class="pos-rel flex-row col-xl-2 flex-c triple-dot-container">
+                        <div class="triple-dot no-bg">
+                            <a class="" href="">...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="i-card rounded-b bg-white col-xs-2-1 t-col-md-1 m-col-xl-2 auto-height sm-pad">
+                    <div class="col-xl-2 auto-height pos-rel">
+                        <img src="content/images/l4.jpg">
+                        <div class="col-xl-2 pos-abs i-card-info">
+                        </div>
+                    </div>
+                    <div class="sm-pad i-border">
+                        <h3><a href="single_news.html">تیتر خبر اینجا قرار میگیرد</a></h3>
+                        <p class="txt-justify">استفاده از طراحان گرافیک است. چاپگره و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. </p>
+                    </div>
+                    <div class="pos-rel flex-row col-xl-2 flex-c triple-dot-container">
+                        <div class="triple-dot no-bg">
+                            <a class="" href="">...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="i-card rounded-b bg-white col-xs-2-1 t-col-md-1 m-col-xl-2 auto-height sm-pad">
+                    <div class="col-xl-2 auto-height pos-rel">
+                        <img src="content/images/l3.jpg">
+                        <div class="col-xl-2 pos-abs i-card-info">
+                        </div>
+                    </div>
+                    <div class="sm-pad i-border">
+                        <h3><a href="single_news.html">تیتر خبر اینجا قرار میگیرد</a></h3>
+                        <p class="txt-justify">استفاده از طراحان گرافیک است. چاپگره و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. </p>
+                    </div>
+                    <div class="pos-rel flex-row col-xl-2 flex-c triple-dot-container">
+                        <div class="triple-dot no-bg">
+                            <a class="" href="">...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="i-card rounded-b bg-white col-xs-2-1 t-col-md-1 m-col-xl-2 auto-height sm-pad">
+                    <div class="col-xl-2 auto-height pos-rel">
+                        <img src="content/images/l2.jpg">
+                        <div class="col-xl-2 pos-abs i-card-info">
+                        </div>
+                    </div>
+                    <div class="sm-pad i-border">
+                        <h3><a href="single_news.html">تیتر خبر اینجا قرار میگیرد</a></h3>
+                        <p class="txt-justify">استفاده از طراحان گرافیک است. چاپگره و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. </p>
+                    </div>
+                    <div class="pos-rel flex-row col-xl-2 flex-c triple-dot-container">
+                        <div class="triple-dot no-bg">
+                            <a class="" href="">...</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--main content end-->
+    <!--footer-->
+
+    <footer class="footer auto-height">
+        <div class="bg-6 pos-abs col-xl-2"></div>
+        <div class="flex-row m-flex-col s-b">
+            <div class="footer--about-us flex-col m-col-xl-2 md-pad" style="flex:1">
+                <h4>درباره شرکت</h4>
+                <hr>
+                <p>درباره شرکت :لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف
+                    بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان رد استفاده
+                    قرار گیرد.
+                </p>
+            </div>
+
+
+            <div class="footer--social-accses flex-col m-col-xl-2 md-pad" style="flex:1">
+                <div class="h-center xxl-pad">
+                    <h1 class="">LOGO</h1>
+                </div>
+                <div class="follow-us flex-self-c md-pad">
+                    <h4>ما را در شبکه های اجتماعی دنبال کنید</h4>
+                    <div class="flex-row flex-c flex-wrap" style="font-size: 1.3em">
+                        <a href="#" class="sm-pad xs-marg">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="sm-pad xs-marg">
+                            <i class="fa fa-telegram"></i>
+                        </a>
+                        <a href="#" class="sm-pad xs-marg">
+                            <i class="fa fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                <h4 class="flex-self-c">عضویت در خبر نامه</h4>
+                <div class="flex-row col-xl-2">
+                    <button style="flex: 1" type="submit">عضویت</button>
+                    <input type="email" placeholder="ایمیل خود را وارد کنید" style="flex: 3;">
+                </div>
+            </div>
+            <div class="footer--quick-accses m-col-xl-2 md-pad" style="flex:1">
+                <h4>آخرین مطالب</h4>
+                <hr>
+                <ul>
+                    <li>
+                        <a href="#">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از چاپ </a>
+                    </li>
+                    <li>
+                        <a href="#">ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ </a>
+                    </li>
+                    <li>
+                        <a href="#">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنع </a>
+                    </li>
+                    <li>
+                        <a href="#">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت  </a>
+                    </li>
+                    <li>
+                        <a href="#">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت  </a>
+                    </li>
+                    <li>
+                        <a href="#">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت  </a>
+                    </li>
+                    <li>
+                        <a href="#">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت  </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js "></script>
+    <script src="js/script.js "></script>
+
+    <div class="button--scroll-up right-bottom sm-pad"><i class="fa fa-chevron-up"></i></div>
+
+
+    <!--footer end-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        var index = 0;
+        let i;
+        var maxindex = $('.gl > div').length;
+
+        $(".gallery div").click(function() {
+            $(".gallery-modal").removeClass("modal-disp-none");
+            $(".gallery-modal").addClass("modal-container");
+            $(".dark-overlay").fadeIn("medium");
+            i = this.dataset.index;
+            $(".img-modal").empty().append('<img class="modal-img" data-pos="0" src="content/images/turkey' + i + '.jpg" alt="turkey">');
+            $(".img-modal img").addClass("active");
+        });
+        $(".btn-close").click(function() {
+            $(".gallery-modal").addClass("modal-disp-none");
+            $(".gallery-modal").removeClass("modal-container");
+            $(".dark-overlay").fadeOut("medium");
+        });
+
+        let onProgress = false;
+        $(".btn-modal-next").click(function() {
+            if (onProgress)
+                return;
+            onProgress = true;
+            i = parseInt(i);
+            i = i < maxindex ? i + 1 : 1;
+            let imageContainer = $(this).parent().children(".img-modal");
+
+            imageContainer.children().each(function() {
+                if (this.dataset.pos == "-1") {
+                    // $(this).addClass('active');
+                } else if (this.dataset.pos == "0") {
+                    $(this).addClass("deactive-next");
+                }
+            });
+
+            let timer = setInterval(() => {
+                imageContainer.children().each(function() {
+                    if (this.dataset.pos == "0") {
+                        $(this).remove();
+                    }
+                });
+
+                imageContainer.append('<img class="modal-img prev" data-pos="-1" src="content/images/turkey' + i + '.jpg" alt="turkey">');
+                let activeTimer = setInterval(function() {
+                    imageContainer.children().addClass("active");
+                    clearInterval(activeTimer);
+                }, 100);
+                imageContainer.children("img").attr("data-pos", "0");
+                clearInterval(timer);
+                onProgress = false;
+            }, 1200);
+
+        });
+        $(".btn-modal-pre").click(function() {
+            if (onProgress)
+                return;
+            onProgress = true;
+            i = parseInt(i);
+            i = i < maxindex ? i + 1 : 1;
+            let imageContainer = $(this).parent().children(".img-modal");
+
+            imageContainer.children().each(function() {
+                if (this.dataset.pos == "-1") {
+                    // $(this).addClass('active');
+                } else if (this.dataset.pos == "0") {
+                    $(this).addClass("deactive-prev");
+                }
+            });
+
+            let timer = setInterval(() => {
+                imageContainer.children().each(function() {
+                    if (this.dataset.pos == "0") {
+                        $(this).remove();
+                    }
+                });
+
+                imageContainer.append('<img class="modal-img next" data-pos="-1" src="content/images/turkey' + i + '.jpg" alt="turkey">');
+                let activeTimer = setInterval(function() {
+                    imageContainer.children().addClass("active");
+                    clearInterval(activeTimer);
+                }, 100);
+                imageContainer.children("img").attr("data-pos", "0");
+                clearInterval(timer);
+                onProgress = false;
+            }, 1200);
+        });
+        $(".gl div").hover(function() {
+            $(this).siblings().toggleClass("blur");
+        });
+    </script>
+</body>
+
+</html>
