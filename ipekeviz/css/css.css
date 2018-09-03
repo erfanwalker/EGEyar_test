@@ -2249,12 +2249,12 @@ ul.drop-down-ul li i {
 }
 
 .slide:nth-child(1) .slide__overlay {
-    background: #e99c7e7c;
+    background: rgba(60, 100, 160, 0.4);
 }
 
 @media (max-width: 991px) {
     .slide:nth-child(1) .slide__text {
-        background-color: rgba(233, 156, 126, 0.8);
+        background-color: rgba(60, 100, 160, 0.8);
         right: 0;
     }
 }
