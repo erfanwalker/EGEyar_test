@@ -4,7 +4,7 @@ $(document).ready(() => {
         // ======== variables =========
         //==== elements ====
         let $window = $(window),
-            nav = $('nav'),
+            nav = $('nav.navbar-container'),
             $overlay = $('.overlay');
 
         //==== ints ====
@@ -15,7 +15,7 @@ $(document).ready(() => {
 
 
         let navItemPlacement = () => {
-                let topOfActive = $('li.active').position().top;
+                let topOfActive = $('.navbar-menu li.active').position().top;
                 let margin = 2 - topOfActive;
                 $('.navbar-menu').css("top", margin + 'px');
             }
@@ -23,12 +23,12 @@ $(document).ready(() => {
             // ===== resize =====
         let navReplaced = false;
         $($window).resize(() => {
-            if (!navReplaced && window.innerWidth < 1060) {
+            if (window.innerWidth < 720 || window.innerHeight < 480) {
                 navItemPlacement();
-                navReplaced = true;
             }
-            $('.navbar-container').css('min-height', '55px');
-
+            $('.navbar-container').css('min-height', '50px');
+            nav.css('overflow-y', 'hidden');
+            $('.navbar-container').scrollTop(0);
         });
 
         // ===== Scroll =====
@@ -37,7 +37,7 @@ $(document).ready(() => {
             if (($window).scrollTop() < 50) {
                 $('.navbar-collapse-btn').css({
                     'position': 'absolute',
-                    'top': '60px',
+                    'top': '59px',
                 });
                 nav.css({ 'top': '50px', 'position': 'absolute' });
             }
@@ -149,11 +149,12 @@ $(document).ready(() => {
         $('.navbar-collapse-btn').click(() => {
             if (!navOnProgress) {
                 navOnProgress = true;
-                nav.toggleClass('active');
                 if ($('.navbar-container').css('min-height').replace(/[^-\d\.]/g, '') < 60) {
-                    $('.navbar-container').css('min-height', window.innerHeight - 110 + 'px');
+                    $('.navbar-container').css('min-height', window.innerHeight - (window.innerHeight / 6) + 'px');
+                    nav.css('overflow-y', 'scroll');
                 } else {
-                    $('.navbar-container').css('min-height', '55px');
+                    $('.navbar-container').css('min-height', '50px');
+                    nav.css('overflow-y', 'hidden');
                 }
 
                 if ($('.navbar-menu').css('top').replace(/[^-\d\.]/g, '') < 0) {

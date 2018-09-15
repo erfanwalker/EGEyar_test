@@ -11,6 +11,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.svg">
     <link rel="stylesheet" href="css/css.css">
     <title>خانه</title>
+    <style>
+        .comment-img {
+            width: 75px;
+            height: 75px;
+            margin: 5px auto;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 1px 1px 8px black;
+        }
+        
+        .comment-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -115,7 +131,7 @@
                         <div class="slide__overlay">
                         </div>
                         <div class="slide__text">
-                            <h3 class="slide__text-heading">نام پروژه اول</h3>
+                            <h3 class="slide__text-heading">نام پروژه او نام پروژه او نام پروژه او نام پروژه اول</h3>
                             <p class="slide__text-desc">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود
                                 ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
                             <a class="slide__text-link" href="single_news.html">ادامه مطلب</a>
@@ -170,7 +186,7 @@
 
     <div class="site col-xl-2 auto-height">
         <div class="col-xl-2 auto-height xl-pad m-md-pad flex-col flex-c">
-            <article class="col-xl-1 lg-pad pos-rel">
+            <article class="col-xl-1 pos-rel">
                 <div class="pos-rel col-xl-1 m-col-xl-2 txt-center h-center">
                     <h2 class="i-caption"><b>در کنارتان هستیم</b></h2>
                 </div>
@@ -300,20 +316,20 @@
             <div class="slideshow-container ">
 
                 <div class="mySlides">
-                    <div><i class="fa fa-user-circle fa-3x c-black lg-pad"></i></div>
+                    <div class="comment-img"><img src="content/images/l2.jpg"></div>
                     <q class="md-pad">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</q>
                     <p class="author">- امیر حسین -</p>
                 </div>
 
                 <div class="mySlides">
-                    <div><i class="fa fa-user-circle fa-3x c-black lg-pad"></i></div>
+                    <div class="comment-img"><img src="content/images/l4.jpg"></div>
                     <q class="md-pad">برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای
                                         زیادی در شصت و سه درصد گذشته، حال و آینده شناخت </q>
                     <p class="author">- عرفان کابلی -</p>
                 </div>
 
                 <div class="mySlides">
-                    <div><i class="fa fa-user-circle fa-3x c-black lg-pad"></i></div>
+                    <div class="comment-img"><img src="content/images/l3.jpg"></div>
                     <q class="md-pad">اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</q>
                     <p class="author">- فرناز مغانی -</p>
                 </div>
@@ -407,7 +423,7 @@
 
             setInterval(() => {
                 plusSlides(1);
-            }, 4000);
+            }, 8000);
 
             $(".dot").each(function() {
                 $(this).click(function() {
